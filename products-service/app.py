@@ -20,6 +20,7 @@ def make_public_product(product):
     new_product = {}
     for field in product:
         if field == 'id':
+            new_product['id'] = product['id']
             new_product['uri'] = url_for('get_products', product_id=product['id'], _external=True)
         else:
             new_product[field] = product[field]
@@ -41,7 +42,7 @@ def create_prod():
     product = [product for product in products if(product['product'] == product_name)]
 
     if(product != []): #conflict (entry already exists)
-        abort(409)
+        return jsonify({'status': 'product '+product[0]['product']+' already exists'}), 409
     
     global index
     productId = index + 1
@@ -58,6 +59,38 @@ def create_prod():
     index = productId
 
     return jsonify({'product': [make_public_product(product)]}), 201
+
+@app.route('/products/delete', methods=['POST'])
+def delete_product():
+    product_name = request.json['product']
+
+    product = [product for product in products if(product['product'] == product_name)]
+
+    if len(product) == 0:
+        return jsonify({'status': 'product '+str(product_name)+' does not exists'}), 404
+    if not request.json:
+        abort(400)
+
+    print(product)
+
+    products.remove(product[0])
+
+    return jsonify({'status': 'product '+product[0]['product']+' deleted'}), 200
+
+@app.route('/products/delete/<int:id>', methods=['POST'])
+def delete_product_id(id):
+    product_id = id
+
+    product = [product for product in products if(product['id'] == product_id)]
+
+    if len(product) == 0:
+        return jsonify({'status': 'product with id '+str(id)+' does not exists'}), 404
+
+    print(product)
+
+    products.remove(product[0])
+
+    return jsonify({'status': 'product '+product[0]['product']+' deleted'}), 200
 
 
 @app.route("/")
