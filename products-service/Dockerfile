@@ -1,7 +1,5 @@
 FROM python:3
 
-ENV FLASK_ENV=prod
-
 ADD . /code
 WORKDIR /code
 
