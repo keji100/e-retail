@@ -3,18 +3,29 @@ import os
 from datetime import datetime  
 from datetime import timedelta  
 
+
 app = Flask(__name__)
+
+'''
+products = [
+    {
+        "id": 1,
+        "price": 1000,
+        "product": "celular",
+        "quantity": 320
+    },
+    {
+        "id": 2,
+        "price": 1000,
+        "product": "televisao",
+        "quantity": 320
+    }
+]
+index = 2
+'''
+
 products = []
 index = 0
-
-def represents_int(value):
-    if(int(value) < 1):
-        return False
-    try: 
-        int(value)
-        return True
-    except ValueError:
-        return False
 
 def make_public_product(product):
     new_product = {}
@@ -32,7 +43,7 @@ def get_products():
 
 @app.route('/products/new', methods=['POST'])
 def create_prod():
-    if not request.json or not 'product' in request.json:  # validar campos obrigatórios
+    if not request.json or not 'product' in request.json:
         abort(400)
         
     product_name = request.json['product']
@@ -41,7 +52,7 @@ def create_prod():
 
     product = [product for product in products if(product['product'] == product_name)]
 
-    if(product != []): #conflict (entry already exists)
+    if(product != []):
         return jsonify({'status': 'product '+product[0]['product']+' already exists'}), 409
     
     global index
@@ -60,7 +71,7 @@ def create_prod():
 
     return jsonify({'product': [make_public_product(product)]}), 201
 
-@app.route('/products/delete', methods=['POST'])
+@app.route('/products/delete', methods=['DELETE'])
 def delete_product():
     product_name = request.json['product']
 
@@ -71,13 +82,11 @@ def delete_product():
     if not request.json:
         abort(400)
 
-    print(product)
-
     products.remove(product[0])
 
     return jsonify({'status': 'product '+product[0]['product']+' deleted'}), 200
 
-@app.route('/products/delete/<int:id>', methods=['POST'])
+@app.route('/products/delete/<int:id>', methods=['DELETE'])
 def delete_product_id(id):
     product_id = id
 
@@ -86,11 +95,53 @@ def delete_product_id(id):
     if len(product) == 0:
         return jsonify({'status': 'product with id '+str(id)+' does not exists'}), 404
 
-    print(product)
-
     products.remove(product[0])
 
     return jsonify({'status': 'product '+product[0]['product']+' deleted'}), 200
+
+
+@app.route('/products/update/<int:id>', methods=['PUT'])
+def update_by_id(id):
+    product_id = id
+    try:
+        product_name = request.json['product']
+    except:
+        pass
+    try:
+        product_price = request.json['price']
+    except:
+        pass
+    try:
+        product_quantity = request.json['quantity']
+    except:
+        pass
+
+    product = [product for product in products if(product['id'] == product_id)]
+
+    if len(product) == 0:
+        return jsonify({'status': 'product with id '+str(id)+' does not exists'}), 404
+    
+    old_product = product[0]['product']
+
+    for product in products:
+        if product['id'] == int(id):
+            try:
+                product['product'] = product_name
+            except:
+                pass
+            try:
+                product['price'] = product_price
+            except:
+                pass
+            try:
+                product['quantity'] = product_quantity
+            except:
+                pass
+
+    return jsonify({'status': 'product '+old_product+' updated'}), 200
+
+
+    
 
 
 @app.route("/")
