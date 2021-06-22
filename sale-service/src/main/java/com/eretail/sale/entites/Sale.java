@@ -9,25 +9,26 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
+
+@Entity(name="SALE")
 public class Sale implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameClient;
-    private String nameSaleperson;
-    private Date dateSale;
-    private BigDecimal total;
+    private String client;
+    private String salesperson;
+    private Date date;
+    private BigDecimal amount;
 
-    public Sale(String nameClient, String nameSaleperson, Date dateSale, BigDecimal total) {
-        this.nameClient = nameClient;
-        this.nameSaleperson = nameSaleperson;
-        this.dateSale = dateSale;
-        this.total = total;
+    public Sale(String client, String salesperson, Date date, BigDecimal amount) {
+        this.client = client;
+        this.salesperson = salesperson;
+        this.date = date;
+        this.amount = amount;
     }
 
 }
