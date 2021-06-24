@@ -1,9 +1,9 @@
 package com.eretail.sale.resources.response;
 
-import lombok.Builder;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import lombok.Builder;
 
 @Builder
 public class ProductResponse {

@@ -1,6 +1,7 @@
 package com.eretail.sale.resources;
 
 import com.eretail.sale.entites.Product;
+import com.eretail.sale.entites.ProductClient;
 import com.eretail.sale.resources.request.ProductRequest;
 import com.eretail.sale.resources.response.ProductResponse;
 import com.eretail.sale.services.ProductService;
@@ -62,6 +63,12 @@ public class ProductResource implements Serializable {
     public ResponseEntity<Product> save(@RequestBody ProductRequest productRequest) {
         Product product = objectMapper.convertValue(productRequest, Product.class);
         Product productResponse = service.save(product);
+        return ResponseEntity.ok(productResponse);
+    }
+
+    @GetMapping(value = "/saveProductService/{id}")
+    public ResponseEntity<Product> saveProductService(@PathVariable Long id) {
+        Product productResponse = service.saveProductService(id);
         return ResponseEntity.ok(productResponse);
     }
 
