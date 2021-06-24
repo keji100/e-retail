@@ -141,19 +141,16 @@ def update_by_id(id):
 
     return jsonify({'status': 'product '+old_product+' updated'}), 200
 
-@app.route('/products', methods=['POST'])
-def get_products_by_id():
-    if not request.json or not 'products' in request.json:
-        return jsonify({'error': 'bad request'}), 404
+@app.route('/products/<int:id>', methods=['GET'])
+def get_products_by_id(id):
+    product_id = id
+    
+    product = [product for product in products if(product['id'] == product_id)]
+    
+    if len(product) == 0:
+        return jsonify({'status': 'product with id '+str(id)+' does not exists'}), 404
 
-    result = []
-    for i in range(len(request.json['products'][0])):
-        index = i+1
-        product = [product for product in products if(product['id'] == request.json['products'][0]['id'+str(index)])]
-        if len(product) > 0:
-            result.append([make_public_product(product) for product in product])
-
-    return jsonify({'products': result}), 200
+    return jsonify(product[0]), 200
     
 @app.route('/products/news', methods=['POST'])
 def create_more_than_one():
