@@ -10,7 +10,7 @@ import java.util.List;
 public class SaleResponse {
 
     private SalespersonResponse salesperson;
-    private CustomerResponse costumer;
+    private CustomerResponse customer;
     private List<ProductResponse> products;
     private Date date;
     private BigDecimal amount;
@@ -23,12 +23,12 @@ public class SaleResponse {
         return salesperson;
     }
 
-    public void setCostumer(CustomerResponse costumer) {
-        this.costumer = costumer;
+    public void setCustomer(CustomerResponse customer) {
+        this.customer = customer;
     }
 
-    public CustomerResponse getCostumer() {
-        return costumer;
+    public CustomerResponse getCustomer() {
+        return customer;
     }
 
     public void setProducts(List<ProductResponse> products) {

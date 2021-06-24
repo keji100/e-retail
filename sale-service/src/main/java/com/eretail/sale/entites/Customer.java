@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +18,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 
-@Entity(name="COSTUMER")
-public class Costumer {
+@Entity(name="CUSTOMER")
+public class Customer {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -26,9 +27,12 @@ public class Costumer {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Type(type = "uuid-char")
     private UUID id;
+
     @Column
     private String name;
+
     @Column
     private String email;
 

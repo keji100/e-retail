@@ -41,7 +41,29 @@ public class SaleResource implements Serializable {
     public ResponseEntity<SaleResponse> findById(@PathVariable UUID id) {
         Optional<Sale> sale = this.service.findById(id);
         if (sale.isPresent()) {
-            return ResponseEntity.ok(objectMapper.convertValue(sale, SaleResponse.class));
+            return ResponseEntity.ok( SaleResponse.builder()
+                    .salesperson(SalespersonResponse.builder()
+                            .name(sale.get().getSalesperson().getName())
+                            .build()
+                    )
+                    .customer(CustomerResponse.builder()
+                            .name(sale.get().getCustomer().getName())
+                            .email(sale.get().getCustomer().getEmail())
+                            .build()
+                    )
+                    .products(sale.get().getProducts()
+                            .stream()
+                            .map(product -> ProductResponse.builder()
+                                    .name(product.getName())
+                                    .price(product.getPrice())
+                                    .build())
+                            .collect(Collectors.toList())
+                    )
+                    .amount(sale.get().getProducts()
+                            .stream()
+                            .map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add)
+                    )
+                    .build());
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -57,9 +79,9 @@ public class SaleResource implements Serializable {
                                         .name(sale.getSalesperson().getName())
                                         .build()
                                 )
-                                .costumer(CustomerResponse.builder()
-                                        .name(sale.getCostumer().getName())
-                                        .email(sale.getCostumer().getEmail())
+                                .customer(CustomerResponse.builder()
+                                        .name(sale.getCustomer().getName())
+                                        .email(sale.getCustomer().getEmail())
                                         .build()
                                 )
                                 .products(sale.getProducts()

@@ -36,7 +36,10 @@ public class SalespersonResource implements Serializable {
     public ResponseEntity<SalespersonResponse> findById(@PathVariable UUID id) {
         Optional<Salesperson> salesperson = this.service.findById(id);
         if (salesperson.isPresent()) {
-            return ResponseEntity.ok(objectMapper.convertValue(salesperson, SalespersonResponse.class));
+            return ResponseEntity.ok(SalespersonResponse.builder()
+                    .id(salesperson.get().getId())
+                    .name(salesperson.get().getName())
+                    .build());
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -46,7 +49,10 @@ public class SalespersonResource implements Serializable {
         List<Salesperson> salesperson = this.service.findAll();
         return ResponseEntity.ok(salesperson
                 .stream()
-                .map(person -> objectMapper.convertValue(person, SalespersonResponse.class))
+                .map(person -> SalespersonResponse.builder()
+                        .id(person.getId())
+                        .name(person.getName())
+                        .build())
                 .collect(Collectors.toList()));
     }
 

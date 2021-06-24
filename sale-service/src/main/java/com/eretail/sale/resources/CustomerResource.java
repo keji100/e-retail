@@ -1,9 +1,9 @@
 package com.eretail.sale.resources;
 
-import com.eretail.sale.entites.Costumer;
-import com.eretail.sale.resources.request.CostumerRequest;
+import com.eretail.sale.entites.Customer;
+import com.eretail.sale.resources.request.CustomerRequest;
 import com.eretail.sale.resources.response.CustomerResponse;
-import com.eretail.sale.services.CostumerService;
+import com.eretail.sale.services.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,39 +22,39 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/customer")
-public class CostumerResource implements Serializable {
+public class CustomerResource implements Serializable {
 
-    private final CostumerService service;
+    private final CustomerService service;
     private final ObjectMapper objectMapper;
 
-    public CostumerResource(CostumerService service, ObjectMapper objectMapper) {
+    public CustomerResource(CustomerService service, ObjectMapper objectMapper) {
         this.service = service;
         this.objectMapper = objectMapper;
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CustomerResponse> findById(@PathVariable UUID id) {
-        Optional<Costumer> costumer = this.service.findById(id);
-        if(costumer.isPresent()) {
-            return ResponseEntity.ok(objectMapper.convertValue(costumer, CustomerResponse.class));
+        Optional<Customer> customer = this.service.findById(id);
+        if(customer.isPresent()) {
+            return ResponseEntity.ok(objectMapper.convertValue(customer, CustomerResponse.class));
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/")
     public ResponseEntity<List<CustomerResponse>> findAll() {
-        List<Costumer> costumers = this.service.findAll();
-        return ResponseEntity.ok(costumers
+        List<Customer> customers = this.service.findAll();
+        return ResponseEntity.ok(customers
                         .stream()
-                        .map(costumer -> objectMapper.convertValue(costumer, CustomerResponse.class))
+                        .map(customer -> objectMapper.convertValue(customer, CustomerResponse.class))
                         .collect(Collectors.toList()));
     }
 
     @PostMapping
-    public ResponseEntity<Costumer> save(@RequestBody CostumerRequest costumerRequest) {
-        Costumer costumer = objectMapper.convertValue(costumerRequest, Costumer.class);
-        Costumer costumerResponse = service.save(costumer);
-        return ResponseEntity.ok(costumerResponse);
+    public ResponseEntity<Customer> save(@RequestBody CustomerRequest customerRequest) {
+        Customer customer = objectMapper.convertValue(customerRequest, Customer.class);
+        Customer customerResponse = service.save(customer);
+        return ResponseEntity.ok(customerResponse);
     }
 
 }

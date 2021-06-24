@@ -1,6 +1,6 @@
 package com.eretail.sale.resources.request;
 
-public class CostumerRequest {
+public class CustomerRequest {
 
     private String name;
     private String email;

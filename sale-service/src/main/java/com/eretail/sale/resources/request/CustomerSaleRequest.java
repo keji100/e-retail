@@ -2,7 +2,7 @@ package com.eretail.sale.resources.request;
 
 import java.util.UUID;
 
-public class CostumerSaleRequest {
+public class CustomerSaleRequest {
 
     private UUID id;
 

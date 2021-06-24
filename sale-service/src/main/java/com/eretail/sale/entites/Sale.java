@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,11 +35,12 @@ public class Sale implements Serializable {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Type(type = "uuid-char")
     private UUID id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "costumer_id", referencedColumnName = "id")
-    private Costumer costumer;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "salesperson_id", referencedColumnName = "id")
@@ -51,8 +53,10 @@ public class Sale implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
     )
     private List<Product> products;
+
     @Column
     private Date date;
+
     @Column
     private BigDecimal amount;
 

@@ -36,7 +36,11 @@ public class ProductResource implements Serializable {
     public ResponseEntity<ProductResponse> findById(@PathVariable UUID id) {
         Optional<Product> product = this.service.findById(id);
         if (product.isPresent()) {
-            return ResponseEntity.ok(objectMapper.convertValue(product, ProductResponse.class));
+            return ResponseEntity.ok(ProductResponse.builder()
+                    .id(product.get().getId())
+                    .name(product.get().getName())
+                    .price(product.get().getPrice())
+                    .build());
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -46,7 +50,11 @@ public class ProductResource implements Serializable {
         List<Product> products = this.service.findAll();
         return ResponseEntity.ok(products
                 .stream()
-                .map(product -> objectMapper.convertValue(product, ProductResponse.class))
+                .map(product -> ProductResponse.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .price(product.getPrice())
+                        .build())
                 .collect(Collectors.toList()));
     }
 

@@ -6,16 +6,16 @@ import java.util.List;
 public class SaleRequest {
 
     private SalespersonSaleRequest salesperson;
-    private CostumerSaleRequest costumer;
+    private CustomerSaleRequest customer;
     private List<ProductSaleRequest> products;
     private Date date;
 
-    public void setCostumer(CostumerSaleRequest costumer) {
-        this.costumer = costumer;
+    public void setCustomer(CustomerSaleRequest customer) {
+        this.customer = customer;
     }
 
-    public CostumerSaleRequest getCostumer() {
-        return costumer;
+    public CustomerSaleRequest getCustomer() {
+        return customer;
     }
     
     public void setProducts(List<ProductSaleRequest> products) {
